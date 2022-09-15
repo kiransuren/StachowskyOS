@@ -10,6 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -396,6 +397,31 @@
               <FileName>uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>_threadsCore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\_threadsCore.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>New Group</GroupName>
+          <Files>
+            <File>
+              <FileName>_threadsCore.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\_threadsCore.h</FilePath>
+            </File>
+            <File>
+              <FileName>type.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\type.h</FilePath>
+            </File>
+            <File>
+              <FileName>uart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\src\uart.h</FilePath>
             </File>
           </Files>
         </Group>

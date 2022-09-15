@@ -1,0 +1,7 @@
+	AREA handle_pend,CODE,READONLY
+	GLOBAL PendSV_Handler
+	PRESERVE8
+PendSV_Handler
+	MOV LR,#0xFFFFFFFD
+	BX LR
+	END
