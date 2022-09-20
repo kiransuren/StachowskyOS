@@ -11,7 +11,6 @@
 
 #include "_kernelCore.h"
 
-volatile uint32_t* x = (uint32_t*)0;
 //This is C. The expected function heading is int main(void)
 int main( void ) 
 {
@@ -19,7 +18,8 @@ int main( void )
 	//you may see some weird behaviour
 	SystemInit();
 	
-	setThreadingWithPSP(getNewThreadStack(128));
+
+	setThreadingWithPSP(getNewThreadStack(128));	// set PSP for new thread stack
 	kernelInit();
 	osSched();
 	//Printf now goes to the UART, so be sure to have PuTTY open and connected

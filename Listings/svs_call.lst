@@ -8,7 +8,11 @@ ARM Macro Assembler    Page 1
     2 00000000                 GLOBAL           PendSV_Handler
     3 00000000                 PRESERVE8
     4 00000000         PendSV_Handler
-    5 00000000 F06F 0E02       MOV              LR,#0xFFFFFFFD
+    5 00000000 F06F 0E02       MOV              LR,#0xFFFFFFFD ;loads LR with i
+                                                            nstruction to retur
+                                                            n form ISR, use PSP
+                                                             and go into Thread
+                                                             mode
     6 00000004 4770            BX               LR
     7 00000006                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
