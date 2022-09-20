@@ -399,6 +399,11 @@
               <FilePath>.\src\uart.c</FilePath>
             </File>
             <File>
+              <FileName>svs_call.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\src\svs_call.s</FilePath>
+            </File>
+            <File>
               <FileName>_threadsCore.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\_threadsCore.c</FilePath>
