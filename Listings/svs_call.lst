@@ -1,0 +1,44 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             handle_pend,CODE,READONLY
+    2 00000000                 GLOBAL           PendSV_Handler
+    3 00000000                 PRESERVE8
+    4 00000000         PendSV_Handler
+    5 00000000 F06F 0E02       MOV              LR,#0xFFFFFFFD
+    6 00000004 4770            BX               LR
+    7 00000006                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=.\objects\svs_call.d -o.\objects\svs_call.o -I.\RTE\Device\LPC1768
+ -I.\RTE\_Target_1 -IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\In
+clude -IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include --pr
+edefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__UVISION_
+VERSION SETA 531" --predefine="_RTE_ SETA 1" --predefine="LPC175x_6x SETA 1" --
+predefine="_RTE_ SETA 1" --list=.\listings\svs_call.lst src\svs_call.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+PendSV_Handler 00000000
+
+Symbol: PendSV_Handler
+   Definitions
+      At line 4 in file src\svs_call.s
+   Uses
+      At line 2 in file src\svs_call.s
+Comment: PendSV_Handler used once
+handle_pend 00000000
+
+Symbol: handle_pend
+   Definitions
+      At line 1 in file src\svs_call.s
+   Uses
+      None
+Comment: handle_pend unused
+2 symbols
+337 symbols in table

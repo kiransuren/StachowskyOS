@@ -9,6 +9,8 @@
 
 #include "_threadsCore.h"
 
+#include "_kernelCore.h"
+
 volatile uint32_t* x = (uint32_t*)0;
 //This is C. The expected function heading is int main(void)
 int main( void ) 
@@ -17,10 +19,11 @@ int main( void )
 	//you may see some weird behaviour
 	SystemInit();
 	
-	setThreadingWithPSP(getNewThreadStack(127));
-
+	setThreadingWithPSP(getNewThreadStack(128));
+	kernelInit();
+	osSched();
 	//Printf now goes to the UART, so be sure to have PuTTY open and connected
-	printf("Hello, world!\r\n");
+	//printf("Hello, world!\r\n");
 	
 	//Your code should always terminate in an endless loop if it is done. If you don't
 	//the processor will enter a hardfault and will be weird
