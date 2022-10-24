@@ -5,16 +5,39 @@ ARM Macro Assembler    Page 1
 
 
     1 00000000                 AREA             handle_pend,CODE,READONLY
-    2 00000000                 GLOBAL           PendSV_Handler
-    3 00000000                 PRESERVE8
-    4 00000000         PendSV_Handler
-    5 00000000 F06F 0E02       MOV              LR,#0xFFFFFFFD ;loads LR with i
-                                                            nstruction to retur
-                                                            n form ISR, use PSP
-                                                             and go into Thread
-                                                             mode
-    6 00000004 4770            BX               LR
-    7 00000006                 END
+    2 00000000                 EXTERN           taskSwitch  ;I am going to call
+                                                             a C function to ha
+                                                            ndle the switching
+    3 00000000                 GLOBAL           PendSV_Handler
+    4 00000000                 PRESERVE8
+    5 00000000         PendSV_Handler
+    6 00000000         
+    7 00000000 F3EF 8009       MRS              r0,PSP
+    8 00000004         
+    9 00000004         ;Store the registers
+   10 00000004 E920 0FF0       STMDB            r0!,{r4-r11}
+   11 00000008         
+   12 00000008         ;call kernel task switch
+   13 00000008 F7FF FFFE       BL               taskSwitch
+   14 0000000C         
+   15 0000000C F3EF 8009       MRS              r0,PSP      ;this is the new ta
+                                                            sk stack
+   16 00000010 F06F 0E02       MOV              LR,#0xFFFFFFFD ;magic return va
+                                                            lue to get us back 
+                                                            to Thread mode
+   17 00000014         
+   18 00000014         ;LoaD Multiple Increment After, basically undo the stack
+                        pushes we did before
+   19 00000014 E8B0 0FF0       LDMIA            r0!,{r4-r11}
+   20 00000018         
+   21 00000018         ;Reload PSP. Now that we've popped a bunch, PSP has to b
+                       e updated
+   22 00000018 F380 8809       MSR              PSP,r0
+   23 0000001C         
+   24 0000001C         ;return
+   25 0000001C 4770            BX               LR
+   26 0000001E         
+   27 0000001E                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\objects\svs_call.d -o.\objects\svs_call.o -I.\RTE\Device\LPC1768
  -I.\RTE\_Target_1 -IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\In
@@ -32,9 +55,9 @@ PendSV_Handler 00000000
 
 Symbol: PendSV_Handler
    Definitions
-      At line 4 in file src\svs_call.s
+      At line 5 in file src\svs_call.s
    Uses
-      At line 2 in file src\svs_call.s
+      At line 3 in file src\svs_call.s
 Comment: PendSV_Handler used once
 handle_pend 00000000
 
@@ -45,4 +68,19 @@ Symbol: handle_pend
       None
 Comment: handle_pend unused
 2 symbols
-337 symbols in table
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+taskSwitch 00000000
+
+Symbol: taskSwitch
+   Definitions
+      At line 2 in file src\svs_call.s
+   Uses
+      At line 13 in file src\svs_call.s
+Comment: taskSwitch used once
+1 symbol
+338 symbols in table

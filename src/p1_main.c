@@ -11,6 +11,21 @@
 
 #include "_kernelCore.h"
 
+void thread1(void *args){
+	while(1){
+		printf("Hello\n");
+		osYield();
+	}
+}
+
+
+void thread2(void *args){
+	while(1){
+		printf("Bye Monkey!\n");
+		osYield();
+	}
+}
+
 //This is C. The expected function heading is int main(void)
 int main( void ) 
 {
@@ -19,9 +34,14 @@ int main( void )
 	SystemInit();
 	
 
-	setThreadingWithPSP(getNewThreadStack(128));	// set PSP for new thread stack
+	//setThreadingWithPSP(getNewThreadStack(128));	// set PSP for new thread stack
 	kernelInit();
-	osSched();
+	
+	// Create threads
+	createThread(thread1);
+	createThread(thread2);
+	
+	kernelStart();
 	//Printf now goes to the UART, so be sure to have PuTTY open and connected
 	//printf("Hello, world!\r\n");
 	

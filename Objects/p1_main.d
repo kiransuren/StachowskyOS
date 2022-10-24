@@ -10,4 +10,5 @@
 .\objects\p1_main.o: C:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\p1_main.o: src\uart.h
 .\objects\p1_main.o: src\_threadsCore.h
+.\objects\p1_main.o: src\osDef.h
 .\objects\p1_main.o: src\_kernelCore.h
