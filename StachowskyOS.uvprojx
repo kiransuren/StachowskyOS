@@ -22,7 +22,7 @@
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll>UL2CM3(-S0 -C0 -P0 -FD10000000 -FCFE0 -FN1 -FF0LPC_IAP_512 -FS00 -FL080000 -FP0($$Device:LPC1768$Flash\LPC_IAP_512.FLM))</FlashDriverDll>
-          <DeviceId>4868</DeviceId>
+          <DeviceId>0</DeviceId>
           <RegisterFile>$$Device:LPC1768$Device\Include\LPC17xx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
@@ -49,7 +49,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>StachowskyOS</OutputName>
+          <OutputName>tim</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -110,13 +110,13 @@
         </CommonProperty>
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
-          <SimDllArguments>-MPU</SimDllArguments>
-          <SimDlgDll>DARMP1.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pLPC1768</SimDlgDllArguments>
+          <SimDllArguments>  -MPU</SimDllArguments>
+          <SimDlgDll>DCM.DLL</SimDlgDll>
+          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
-          <TargetDllArguments>-MPU</TargetDllArguments>
-          <TargetDlgDll>TARMP1.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pLPC1768</TargetDlgDllArguments>
+          <TargetDllArguments> -MPU</TargetDllArguments>
+          <TargetDlgDll>TCM.DLL</TargetDlgDll>
+          <TargetDlgDllArguments>-pCM3</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -189,7 +189,7 @@
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>1</useUlib>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -399,14 +399,9 @@
               <FilePath>.\src\uart.c</FilePath>
             </File>
             <File>
-              <FileName>svs_call.s</FileName>
+              <FileName>svc_call.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\src\svs_call.s</FilePath>
-            </File>
-            <File>
-              <FileName>_threadsCore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\_threadsCore.c</FilePath>
+              <FilePath>.\src\svc_call.s</FilePath>
             </File>
             <File>
               <FileName>_kernelCore.c</FileName>
@@ -414,24 +409,9 @@
               <FilePath>.\src\_kernelCore.c</FilePath>
             </File>
             <File>
-              <FileName>_kernelCore.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\_kernelCore.h</FilePath>
-            </File>
-            <File>
-              <FileName>_threadsCore.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\_threadsCore.h</FilePath>
-            </File>
-            <File>
-              <FileName>type.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\type.h</FilePath>
-            </File>
-            <File>
-              <FileName>uart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\src\uart.h</FilePath>
+              <FileName>_threadsCore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\_threadsCore.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -455,7 +435,7 @@
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="LPC17xx CMSIS Device ARMCC">
-        <package name="LPC1700_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.7.0"/>
+        <package name="LPC1700_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.7.1"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>

@@ -1,11 +1,15 @@
-#ifndef __osDef_H 
-#define __osDef_H
+#ifndef __osDefs_H 
+#define __osDefs_H
 
 #include <stdint.h>
 
-#define MAX_NUM_THREADS 8
+#define MAX_NUM_THREADS 4
 #define DEFAULT_THREAD_STACK_SIZE 0x200
 #define MSR_STACK_SIZE 0x400
+
+#define MSP_LOCATION 0x0
+#define SHPR3 *(uint32_t*)0xE000ED20
+#define ICSR *(uint32_t*)0xE000ED04
 
 typedef enum{
 	BLOCKED,

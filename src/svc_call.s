@@ -1,5 +1,5 @@
 	AREA	handle_pend,CODE,READONLY
-	EXTERN taskSwitch ;I am going to call a C function to handle the switching
+	EXTERN taskSwitch ;C function to be used for task switching
 	GLOBAL PendSV_Handler
 	PRESERVE8
 PendSV_Handler

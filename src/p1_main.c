@@ -8,12 +8,14 @@
 #include "uart.h"
 
 #include "_threadsCore.h"
-
 #include "_kernelCore.h"
+
+// global variable for testing
+int x = 0; 
 
 void thread1(void *args){
 	while(1){
-		printf("Hello\n");
+		printf("Hello Monkey %d\n", x);
 		osYield();
 	}
 }
@@ -21,7 +23,30 @@ void thread1(void *args){
 
 void thread2(void *args){
 	while(1){
-		printf("Bye Monkey!\n");
+		printf("Oooo ooo ahh ahh!\n");
+		osYield();
+	}
+}
+
+void thread3(void *args){
+	while(1){
+		printf("Bye Monkey! %d\n", x);
+		osYield();
+	}
+}
+
+void thread4(void *args){
+	while(1){
+		printf("Ahhh ahhh ooo oooo\n");
+		x++;
+		osYield();
+	}
+}
+
+void thread5(void *args){
+	while(1){
+		printf("This thread should never run if max is 4!\n");
+		x++;
 		osYield();
 	}
 }
@@ -32,20 +57,19 @@ int main( void )
 	//Always call this function at the start. It sets up various peripherals, the clock etc. If you don't call this
 	//you may see some weird behaviour
 	SystemInit();
-	
 
-	//setThreadingWithPSP(getNewThreadStack(128));	// set PSP for new thread stack
+	// initialize some kernel stuff
 	kernelInit();
 	
 	// Create threads
 	createThread(thread1);
 	createThread(thread2);
+	createThread(thread3);
+	createThread(thread4);
+	createThread(thread5);
 	
+	// start kernel
 	kernelStart();
-	//Printf now goes to the UART, so be sure to have PuTTY open and connected
-	//printf("Hello, world!\r\n");
-	
-	//Your code should always terminate in an endless loop if it is done. If you don't
-	//the processor will enter a hardfault and will be weird
+
 	while(1);
 }

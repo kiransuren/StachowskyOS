@@ -5,9 +5,9 @@ ARM Macro Assembler    Page 1
 
 
     1 00000000                 AREA             handle_pend,CODE,READONLY
-    2 00000000                 EXTERN           taskSwitch  ;I am going to call
-                                                             a C function to ha
-                                                            ndle the switching
+    2 00000000                 EXTERN           taskSwitch  ;C function to be u
+                                                            sed for task switch
+                                                            ing
     3 00000000                 GLOBAL           PendSV_Handler
     4 00000000                 PRESERVE8
     5 00000000         PendSV_Handler
@@ -39,12 +39,12 @@ ARM Macro Assembler    Page 1
    26 0000001E         
    27 0000001E                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
-ork --depend=.\objects\svs_call.d -o.\objects\svs_call.o -I.\RTE\Device\LPC1768
+ork --depend=.\objects\svc_call.d -o.\objects\svc_call.o -I.\RTE\Device\LPC1768
  -I.\RTE\_Target_1 -IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\In
 clude -IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include --pr
-edefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predefine="__UVISION_
-VERSION SETA 531" --predefine="_RTE_ SETA 1" --predefine="LPC175x_6x SETA 1" --
-predefine="_RTE_ SETA 1" --list=.\listings\svs_call.lst src\svs_call.s
+edefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 531" --predefine="_
+RTE_ SETA 1" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1" --list=
+.\listings\svc_call.lst src\svc_call.s
 
 
 
@@ -55,15 +55,15 @@ PendSV_Handler 00000000
 
 Symbol: PendSV_Handler
    Definitions
-      At line 5 in file src\svs_call.s
+      At line 5 in file src\svc_call.s
    Uses
-      At line 3 in file src\svs_call.s
+      At line 3 in file src\svc_call.s
 Comment: PendSV_Handler used once
 handle_pend 00000000
 
 Symbol: handle_pend
    Definitions
-      At line 1 in file src\svs_call.s
+      At line 1 in file src\svc_call.s
    Uses
       None
 Comment: handle_pend unused
@@ -78,9 +78,9 @@ taskSwitch 00000000
 
 Symbol: taskSwitch
    Definitions
-      At line 2 in file src\svs_call.s
+      At line 2 in file src\svc_call.s
    Uses
-      At line 13 in file src\svs_call.s
+      At line 13 in file src\svc_call.s
 Comment: taskSwitch used once
 1 symbol
-338 symbols in table
+337 symbols in table

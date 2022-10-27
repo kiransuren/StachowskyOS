@@ -1,6 +1,10 @@
 #include "_threadsCore.h"
-#include "osDef.h"
+#include "osDefs.h"
 #include "_kernelCore.h"
+
+extern thread_t threadPool[MAX_NUM_THREADS];
+extern int osCurrentThread;
+extern int threadPoolCurrentSize;
 
 uint32_t* getMSPInitialLocation(void){
 	uint32_t* x = MSP_LOCATION;
@@ -23,30 +27,40 @@ void setThreadingWithPSP(uint32_t* threadStack){
 	__set_CONTROL((uint32_t) 1<<1);
 }
 
-void createThread(void (*func)(void *vargs)){
-	//TODO: check if pool size has reached max
-	thread_t newThread = {getNewThreadStack(MSR_STACK_SIZE + (threadPoolCurrentSize)*DEFAULT_THREAD_STACK_SIZE), func, DEFAULT_THREAD_STACK_SIZE, threadPoolCurrentSize,1, IDLE};
+int createThread(void (*func)(void *vargs)){
+	
+	// check if max number of threads reached
+	if(threadPoolCurrentSize >= MAX_NUM_THREADS){
+			return 1;
+	}
+
+	//TODO: deal with priorities
+	thread_t newThread = {getNewThreadStack(MSR_STACK_SIZE + threadPoolCurrentSize*DEFAULT_THREAD_STACK_SIZE), func, DEFAULT_THREAD_STACK_SIZE, threadPoolCurrentSize,1, IDLE};
 	threadPool[threadPoolCurrentSize] = newThread;
-		// bootstrap the first function
-	uint32_t* sp = threadPool[threadPoolCurrentSize].threadStack;
-	*--sp = 1<<24;
-	*--sp = (uint32_t)func;
-	
-	*--sp = 0xF; //LR
-	*--sp = 0xE; //R12
-	*--sp = 0xD; //R3
-	*--sp = 0xC; //R2
-	*--sp = 0xB; //R1
-	*--sp = 0xA; //R0
-	
-	*--sp = 0x9; //R11
-	*--sp = 0x8; //R10
-	*--sp = 0x7; //R9
-	*--sp = 0x6; //R8
-	*--sp = 0x5; //R7
-	*--sp = 0x4; //R6
-	*--sp = 0x3; //R5
-	*--sp = 0x2; //R4
-	
+	//set status register
+	*(--threadPool[threadPoolCurrentSize].threadStack)	= 1<<24;
+	//set program counter function
+	*(--threadPool[threadPoolCurrentSize].threadStack) = (uint32_t)func;
+			
+	//set "important" registers to some arbitrary values
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0xE; //LR
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0xC; //R12
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x3; //R3
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x2; //R2
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x1; //R1
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x0; // R0
+			
+			
+	//set other registers to some arbitrary values
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0xB; //R11
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0xA; //R10
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x9; //R9
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x8; //R8
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x7; //R7
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x6; //R6
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x5; //R5
+	*(--threadPool[threadPoolCurrentSize].threadStack) = 0x4; //R4
+		
 	threadPoolCurrentSize++;
+	return 0;
 }
