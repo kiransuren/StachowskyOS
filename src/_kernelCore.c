@@ -17,6 +17,7 @@ void kernelInit(void){
 
 void osYield(void){
 	
+	osSchedMutex = true;
 	// ROUND ROBIN - find next task to run
 	int osNextThread = osCurrentThread;
 	for(int i = 0; i < threadPoolCurrentSize; i++){
@@ -83,7 +84,6 @@ int kernelStart(void){
 	if(threadPoolCurrentSize > 0){
 		osCurrentThread = -1;
 		setThreadingWithPSP(threadPool[0].threadStack);
-		osSchedMutex = true;
 		osYield();
 	}
 	return 1;
