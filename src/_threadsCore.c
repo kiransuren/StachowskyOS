@@ -35,7 +35,7 @@ int createThread(void (*func)(void *vargs)){
 	}
 
 	//TODO: deal with priorities
-	thread_t newThread = {getNewThreadStack(MSR_STACK_SIZE + threadPoolCurrentSize*DEFAULT_THREAD_STACK_SIZE), func, DEFAULT_THREAD_STACK_SIZE, threadPoolCurrentSize,1, IDLE};
+	thread_t newThread = {getNewThreadStack(MSR_STACK_SIZE + threadPoolCurrentSize*DEFAULT_THREAD_STACK_SIZE), func, DEFAULT_THREAD_STACK_SIZE, threadPoolCurrentSize,1,0,IDLE};
 	threadPool[threadPoolCurrentSize] = newThread;
 	//set status register
 	*(--threadPool[threadPoolCurrentSize].threadStack)	= 1<<24;

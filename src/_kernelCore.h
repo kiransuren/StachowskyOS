@@ -12,8 +12,9 @@ extern int threadPoolCurrentSize;
 
 void kernelInit(void); //initializes memory structures and interrupts necessary to run the kernel
 
-void osYield(void); //called by the kernel to schedule which threads to run
-
+void osYield(void); //called by the thread to yield control
+void osSched(void); //called by the kernel to schedule which threads to run
+	
 int kernelStart(void);
 
 #endif

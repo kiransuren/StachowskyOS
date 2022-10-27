@@ -16,7 +16,7 @@ int x = 0;
 void thread1(void *args){
 	while(1){
 		printf("Hello Monkey %d\n", x);
-		osYield();
+		//osYield();
 	}
 }
 
@@ -24,14 +24,14 @@ void thread1(void *args){
 void thread2(void *args){
 	while(1){
 		printf("Oooo ooo ahh ahh!\n");
-		osYield();
+		//osYield();
 	}
 }
 
 void thread3(void *args){
 	while(1){
 		printf("Bye Monkey! %d\n", x);
-		osYield();
+		//osYield();
 	}
 }
 
@@ -39,7 +39,7 @@ void thread4(void *args){
 	while(1){
 		printf("Ahhh ahhh ooo oooo\n");
 		x++;
-		osYield();
+		//osYield();
 	}
 }
 
@@ -47,7 +47,7 @@ void thread5(void *args){
 	while(1){
 		printf("This thread should never run if max is 4!\n");
 		x++;
-		osYield();
+		//osYield();
 	}
 }
 
@@ -57,6 +57,7 @@ int main( void )
 	//Always call this function at the start. It sets up various peripherals, the clock etc. If you don't call this
 	//you may see some weird behaviour
 	SystemInit();
+	SysTick_Config(SystemCoreClock/MASTER_CLOCK_PERIOD);
 
 	// initialize some kernel stuff
 	kernelInit();
