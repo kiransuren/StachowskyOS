@@ -11,45 +11,50 @@
 #include "_kernelCore.h"
 
 // global variable for testing
-int x = 0; 
+int x = 1;
+int y = 1;
 
+void idleThread(void *args){
+	while(1);
+}
+
+//// CASE 1: three concurrent threads
 void thread1(void *args){
 	while(1){
-		printf("Hello Monkey %d\n", x);
+		threadSleep(15);
+		printf("s\n");	//I sleep for 50ms
 		//osYield();
 	}
 }
 
-
 void thread2(void *args){
 	while(1){
-		printf("Oooo ooo ahh ahh!\n");
-		//osYield();
+		printf("y\n");		//I yield myself
+		osYield();
 	}
 }
 
 void thread3(void *args){
 	while(1){
-		printf("Bye Monkey! %d\n", x);
-		//osYield();
+		printf("f\n");	//I am forced to switch
 	}
 }
 
-void thread4(void *args){
-	while(1){
-		printf("Ahhh ahhh ooo oooo\n");
-		x++;
-		//osYield();
-	}
-}
+// CASE 2: sleep threads
 
-void thread5(void *args){
-	while(1){
-		printf("This thread should never run if max is 4!\n");
-		x++;
-		//osYield();
-	}
-}
+//void thread4(void *args){
+//	while(1){
+//		threadSleep(3000);
+//		printf("I sleep for 3000ms, take %d\n", x++);
+//	}
+//}
+
+//void thread5(void *args){
+//	while(1){
+//		threadSleep(7000);
+//		printf("I sleep for 7000ms, take %d\n", y++);
+//	}
+//}
 
 //This is C. The expected function heading is int main(void)
 int main( void ) 
@@ -63,11 +68,17 @@ int main( void )
 	kernelInit();
 	
 	// Create threads
+	createThread(idleThread);
+	
+	//CASE 1:
 	createThread(thread1);
 	createThread(thread2);
 	createThread(thread3);
-	createThread(thread4);
-	createThread(thread5);
+	
+	//CASE 2:
+//	createThread(thread4);
+//	createThread(thread5);
+
 	
 	// start kernel
 	kernelStart();

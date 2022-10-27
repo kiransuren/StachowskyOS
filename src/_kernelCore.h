@@ -17,4 +17,6 @@ void osSched(void); //called by the kernel to schedule which threads to run
 	
 int kernelStart(void);
 
+void threadSleep(uint32_t sleepPeriod);
+
 #endif
