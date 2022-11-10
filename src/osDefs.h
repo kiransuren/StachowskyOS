@@ -13,6 +13,8 @@
 #define SHPR2 *(uint32_t*)0xE000ED1C
 #define ICSR *(uint32_t*)0xE000ED04
 
+#define MAX_IDLE_PERIOD 0xFFFFFF
+
 typedef enum{
 	IDLE,				// ready to run 
 	BLOCKED,			// TBD

@@ -27,7 +27,7 @@ void setThreadingWithPSP(uint32_t* threadStack){
 	__set_CONTROL((uint32_t) 1<<1);
 }
 
-int createThread(void (*func)(void *vargs)){
+int createThread(void (*func)(void *vargs), uint32_t stackSize, uint32_t priority){
 	
 	// check if max number of threads reached
 	if(threadPoolCurrentSize >= MAX_NUM_THREADS){
@@ -35,7 +35,7 @@ int createThread(void (*func)(void *vargs)){
 	}
 
 	//TODO: deal with priorities
-	thread_t newThread = {getNewThreadStack(MSR_STACK_SIZE + threadPoolCurrentSize*DEFAULT_THREAD_STACK_SIZE), func, DEFAULT_THREAD_STACK_SIZE, threadPoolCurrentSize,1,0,IDLE};
+	thread_t newThread = {getNewThreadStack(MSR_STACK_SIZE + threadPoolCurrentSize*DEFAULT_THREAD_STACK_SIZE), func, stackSize, threadPoolCurrentSize,priority,priority,IDLE};
 	threadPool[threadPoolCurrentSize] = newThread;
 	//set status register
 	*(--threadPool[threadPoolCurrentSize].threadStack)	= 1<<24;
