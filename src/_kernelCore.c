@@ -23,108 +23,38 @@ void osYield(void){
 
 void osSched(void){
 	
-	// ROUND ROBIN - find next task to run
-	int osNextThread = osCurrentThread;
-	for(int i = 0; i < threadPoolCurrentSize; i++){
-		osNextThread = (osNextThread+1)%(threadPoolCurrentSize);							//get next potential task to be run
-		if(threadPool[osNextThread].taskState == IDLE && osNextThread >= 0){
-			//printf("nex thread %d",osNextThread);
-			//everything is good, continue as usual
-			// deal with old task
-			if(threadPool[osCurrentThread].taskState == RUNNING){
-				threadPool[osCurrentThread].taskState = IDLE;															// set "old" task to IDLE
-			}
-			threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); //we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
-			
-			//deal with new task
-			osCurrentThread = osNextThread;
-			threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
-			
-			ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
-			__asm("isb");			// clear pipeline
-			break;
-		}
-	}
+	// find next appropriate task to run
+	int lowestThreadTimerIndex = edfSched();
 	
-	// ensure idle function, right now after looping through once it just exists
+	//Switch current task to waiting
+	threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
+	threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
+	threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
+
+	//deal with new task
+	osCurrentThread = lowestThreadTimerIndex;
+	threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
+			
+	ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
+	__asm("isb");			// clear pipeline
 	
 	return;
 }
 
-void edfSched(void){
+int edfSched(void){
+
+	int lowestThreadTimerIndex = 0; // TODO: not good maybe
 	
-	// dealing with a thread that has exceeded its max runtime and is to be forced to yield
-	if(threadPool[osCurrentThread].threadTimer == 0 && threadPool[osCurrentThread].taskState == RUNNING){
-		// find next task to run
-		int osNextThread = osCurrentThread;
-		int lowestThreadTimerIndex = osNextThread; // TODO: not good maybe
-		int lowestThreadTimerValue = MAX_IDLE_PERIOD;
-		for(int i = 0; i<threadPoolCurrentSize; i++){
-			osNextThread = (osNextThread+1)%(threadPoolCurrentSize);							//get next potential task to be run
-			if(threadPool[osNextThread].threadTimer < lowestThreadTimerValue && threadPool[osCurrentThread].taskState == IDLE){
-				lowestThreadTimerIndex = osNextThread;
-				lowestThreadTimerValue = threadPool[osNextThread].threadTimer;
-			}
+	// dealing with periodically check of earliest deadline task
+	// find next task to run
+	for(int osNextThread = 0; osNextThread<threadPoolCurrentSize; osNextThread++){
+		if((threadPool[osNextThread].threadTimer == 0 && threadPool[osNextThread].taskState == IDLE) && threadPool[lowestThreadTimerIndex].priority > threadPool[osNextThread].priority ){
+			// deadline has been reached for this thread and the priority for this thread is higher than the currently known highest priority that should be executed next
+			lowestThreadTimerIndex = osNextThread;
 		}
-		
-		//Switch current task to waiting
-		threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
-		threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
-		threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
-
-		//deal with new task
-		osCurrentThread = lowestThreadTimerIndex;
-		threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
-			
-		ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
-		__asm("isb");			// clear pipeline
-			
-	}else{
-		// dealing with periodically check of earliest deadline task
-		// find next task to run
-		int osNextThread = osCurrentThread;
-		int lowestThreadTimerIndex = osNextThread; // TODO: not good maybe
-		for(int i = 0; i<threadPoolCurrentSize; i++){
-			osNextThread = (osNextThread+1)%(threadPoolCurrentSize);							//get next potential task to be run
-			if((threadPool[osNextThread].threadTimer == 0 && threadPool[osNextThread].taskState == IDLE) && threadPool[lowestThreadTimerIndex].priority > threadPool[osNextThread].priority ){
-				// deadline has been reached for this thread and the priority for this thread is higher than the currently known highest priority that should be executed next
-				lowestThreadTimerIndex = osNextThread;
-			}
-		}
-		
-		if(lowestThreadTimerIndex == osCurrentThread){
-			// technically do nothing, currently running thread is highest priority
-			
-			//TODO: refactor this to actually do nothing
-			//Switch current task to waiting
-			threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
-			threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
-			threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
-
-			//deal with new task
-			osCurrentThread = lowestThreadTimerIndex;
-			threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
-				
-			ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
-			__asm("isb");			// clear pipeline
-			
-		}else{
-				//Switch current task to waiting
-			threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
-			threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
-			threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
-
-			//deal with new task
-			osCurrentThread = lowestThreadTimerIndex;
-			threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
-				
-			ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
-			__asm("isb");			// clear pipeline
-		}
-
 	}
 	
-	
+	return lowestThreadTimerIndex;
 }
 
 int taskSwitch(void){
@@ -137,7 +67,7 @@ int kernelStart(void){
 	if(threadPoolCurrentSize > 0){
 		osCurrentThread = -1;
 		setThreadingWithPSP(threadPool[0].threadStack);
-		osYield();
+		osSched();
 	}
 	return 1;
 }
@@ -150,13 +80,42 @@ void SysTick_Handler(void){
 			if(threadPool[i].taskState == WAITING && threadPool[i].threadTimer==0){
 				// timer is complete, change task state to IDLE
 				threadPool[i].taskState = IDLE;
-			}else if(threadPool[i].taskState != BLOCKED){
+			}else if(threadPool[i].taskState != BLOCKED && threadPool[i].taskState != 0){
 				// timer not complete, but decerement timer
 				threadPool[i].threadTimer -= 1;
 			}
 	}
 	
-	edfSched();
+	
+	// Check if task has gone on for too long
+	if(threadPool[osCurrentThread].threadTimer == 0 && threadPool[osCurrentThread].taskState == RUNNING){
+		//Switch current task to waiting
+		threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
+		threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
+		threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
+		
+		// find next task to run
+		int lowestThreadTimerIndex = 0;
+		int lowestThreadTimerValue = MAX_IDLE_PERIOD + 1;
+		for(int osNextThread = 0; osNextThread<threadPoolCurrentSize; osNextThread++){							//get next potential task to be run
+			if(threadPool[osNextThread].threadTimer <= lowestThreadTimerValue && threadPool[osNextThread].taskState == IDLE){
+				lowestThreadTimerIndex = osNextThread;
+				lowestThreadTimerValue = threadPool[osNextThread].threadTimer;
+			}
+		}
+
+		//deal with new task
+		osCurrentThread = lowestThreadTimerIndex;
+		threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
+				
+		ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
+		__asm("isb");			// clear pipeline
+	
+	}else{
+		osSched();
+	}
+	//osSched();
+	
 }
 
 void threadSleep(uint32_t sleepPeriod){
@@ -172,27 +131,8 @@ void SVC_Handler_Main(uint32_t *svc_args){
 	//ever it needs to based on that information
 	
 	if(call == 0){
-		// ROUND ROBIN - find next task to run
-		int osNextThread = osCurrentThread;
-		for(int i = 0; i < threadPoolCurrentSize; i++){
-			osNextThread = (osNextThread+1)%(threadPoolCurrentSize);							//get next potential task to be run
-			if(threadPool[osNextThread].taskState == IDLE && osNextThread >= 0){
-				//everything is good, continue as usual
-				// deal with old task
-				if(threadPool[osCurrentThread].taskState == RUNNING){
-					threadPool[osCurrentThread].taskState = IDLE;															// set "old" task to IDLE
-				}
-				threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); //we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
-				
-				//deal with new task
-				osCurrentThread = osNextThread;
-				threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
-				
-				ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
-				__asm("isb");			// clear pipeline
-				break;
-			}
-		}
+		threadPool[osCurrentThread].threadTimer = 0;
+		osSched();
 	}
 	// ensure idle function, right now after looping through once it just exists
 }

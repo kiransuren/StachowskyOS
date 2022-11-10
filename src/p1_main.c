@@ -21,7 +21,7 @@ void idleThread(void *args){
 //// CASE 1: three concurrent threads
 void thread1(void *args){
 	while(1){
-		threadSleep(15);
+		//threadSleep(15);
 		printf("s\n");	//I sleep for 50ms
 		//osYield();
 	}
@@ -72,8 +72,8 @@ int main( void )
 	
 	//CASE 1: createThread(void (*func)(void *vargs), uint32_t stackSize, uint32_t priority)
 	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 4);
-	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 10);
-	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 84);
+	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 4);
+	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 4);
 	
 	//CASE 2:
 //	createThread(thread4);

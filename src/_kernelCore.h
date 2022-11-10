@@ -14,7 +14,8 @@ void kernelInit(void); //initializes memory structures and interrupts necessary 
 
 void osYield(void); //called by the thread to yield control
 void osSched(void); //called by the kernel to schedule which threads to run
-	
+int edfSched(void);
+
 int kernelStart(void);
 
 void threadSleep(uint32_t sleepPeriod);
