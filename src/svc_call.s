@@ -1,6 +1,8 @@
 	AREA	handle_pend,CODE,READONLY
 	EXTERN taskSwitch ;C function to be used for task switching
+	EXTERN SVC_Handler_Main
 	GLOBAL PendSV_Handler
+	GLOBAL SVC_Handler
 	PRESERVE8
 PendSV_Handler
 	
@@ -23,5 +25,11 @@ PendSV_Handler
 		
 		;return
 		BX LR
-
-		END
+		
+SVC_Handler
+	TST LR,#4
+	ITE EQ
+	MRSEQ r0, MSP
+	MRSNE r0, PSP
+	B SVC_Handler_Main
+	END ;Now include this if this is the end of your file, otherwise don’t

@@ -10,6 +10,7 @@
 
 #define MSP_LOCATION 0x0
 #define SHPR3 *(uint32_t*)0xE000ED20
+#define SHPR2 *(uint32_t*)0xE000ED1C
 #define ICSR *(uint32_t*)0xE000ED04
 
 typedef enum{
