@@ -5,7 +5,6 @@
 #include <LPC17xx.h>
 #include "osDefs.h"
 
-
 extern thread_t threadPool[MAX_NUM_THREADS];
 extern int osCurrentThread;
 extern int threadPoolCurrentSize;

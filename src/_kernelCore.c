@@ -26,14 +26,25 @@ void osSched(void){
 	// find next appropriate task to run
 	int lowestThreadTimerIndex = edfSched();
 	
+	if(threadPool[osCurrentThread].priority < threadPool[lowestThreadTimerIndex].priority && threadPool[osCurrentThread].taskState == RUNNING){
+		return;
+	}
+	
 	//Switch current task to waiting
-	threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
-	threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
+	if(threadPool[osCurrentThread].taskState == RUNNING){
+		threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
+		threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
+		if(threadPool[osCurrentThread].isPeriodic){
+			threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].periodicity;
+		}
+	}
+	
 	threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
 
 	//deal with new task
 	osCurrentThread = lowestThreadTimerIndex;
 	threadPool[osCurrentThread].taskState = RUNNING;														// set state of next task
+	threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
 			
 	ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
 	__asm("isb");			// clear pipeline
@@ -43,12 +54,12 @@ void osSched(void){
 
 int edfSched(void){
 
-	int lowestThreadTimerIndex = 0; // TODO: not good maybe
+	int lowestThreadTimerIndex = 0; // default thread is IDLE
 	
 	// dealing with periodically check of earliest deadline task
 	// find next task to run
 	for(int osNextThread = 0; osNextThread<threadPoolCurrentSize; osNextThread++){
-		if((threadPool[osNextThread].threadTimer == 0 && threadPool[osNextThread].taskState == IDLE) && threadPool[lowestThreadTimerIndex].priority > threadPool[osNextThread].priority ){
+		if((threadPool[osNextThread].threadTimer == 0 && threadPool[osNextThread].taskState == IDLE) && threadPool[lowestThreadTimerIndex].priority > threadPool[osNextThread].priority){
 			// deadline has been reached for this thread and the priority for this thread is higher than the currently known highest priority that should be executed next
 			lowestThreadTimerIndex = osNextThread;
 		}
@@ -80,7 +91,7 @@ void SysTick_Handler(void){
 			if(threadPool[i].taskState == WAITING && threadPool[i].threadTimer==0){
 				// timer is complete, change task state to IDLE
 				threadPool[i].taskState = IDLE;
-			}else if(threadPool[i].taskState != BLOCKED && threadPool[i].taskState != 0){
+			}else if(threadPool[i].taskState != BLOCKED && threadPool[i].threadTimer != 0){
 				// timer not complete, but decerement timer
 				threadPool[i].threadTimer -= 1;
 			}
@@ -92,17 +103,13 @@ void SysTick_Handler(void){
 		//Switch current task to waiting
 		threadPool[osCurrentThread].taskState = WAITING;																// set "old" task to WAITING for periodicity
 		threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].priority; // set waiting period
+		if(threadPool[osCurrentThread].isPeriodic){
+			threadPool[osCurrentThread].threadTimer = threadPool[osCurrentThread].periodicity;
+		}
 		threadPool[osCurrentThread].threadStack = (uint32_t*)(__get_PSP() - 8*4); 			//we are about to push 8 uint32_t's (TAIL-CHAINED INTERRUPT)
 		
 		// find next task to run
-		int lowestThreadTimerIndex = 0;
-		int lowestThreadTimerValue = MAX_IDLE_PERIOD + 1;
-		for(int osNextThread = 0; osNextThread<threadPoolCurrentSize; osNextThread++){							//get next potential task to be run
-			if(threadPool[osNextThread].threadTimer <= lowestThreadTimerValue && threadPool[osNextThread].taskState == IDLE){
-				lowestThreadTimerIndex = osNextThread;
-				lowestThreadTimerValue = threadPool[osNextThread].threadTimer;
-			}
-		}
+		int lowestThreadTimerIndex = edfSched();
 
 		//deal with new task
 		osCurrentThread = lowestThreadTimerIndex;
@@ -114,6 +121,7 @@ void SysTick_Handler(void){
 	}else{
 		osSched();
 	}
+	
 	//osSched();
 	
 }
@@ -131,7 +139,7 @@ void SVC_Handler_Main(uint32_t *svc_args){
 	//ever it needs to based on that information
 	
 	if(call == 0){
-		threadPool[osCurrentThread].threadTimer = 0;
+		// yield
 		osSched();
 	}
 	// ensure idle function, right now after looping through once it just exists

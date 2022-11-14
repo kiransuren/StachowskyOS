@@ -10,51 +10,61 @@
 #include "_threadsCore.h"
 #include "_kernelCore.h"
 
-// global variable for testing
-int x = 1;
-int y = 1;
-
 void idleThread(void *args){
 	while(1);
 }
 
-//// CASE 1: three concurrent threads
+//// CASE 1: three concurrent threads with diff frequencies
 void thread1(void *args){
 	while(1){
-		//threadSleep(15);
-		printf("s\n");	//I sleep for 50ms
-		//osYield();
+		printf("s\n");
 	}
 }
-
 void thread2(void *args){
 	while(1){
-		printf("y\n");		//I yield myself
-		//osYield();
+		printf("y\n");
 	}
 }
-
 void thread3(void *args){
 	while(1){
-		printf("f\n");	//I am forced to switch
+		printf("f\n");
 	}
 }
 
-// CASE 2: sleep threads
+// CASE 2: 3 threads concurrently, with yield, sleep and period
+void thread4(void *args){
+	while(1){
+		printf("4\n");
+		osYield();
+	}
+}
+void thread5(void *args){
+	while(1){
+		threadSleep(50);
+		printf("5\n");
+	}
+}
+void thread6(void *args){
+	while(1){
+		printf("6\n");
+	}
+}
 
-//void thread4(void *args){
-//	while(1){
-//		threadSleep(3000);
-//		printf("I sleep for 3000ms, take %d\n", x++);
-//	}
-//}
+// CASE 3: 2 threads that both sleep for at least one second
+void thread7(void *args){
+	while(1){
+		threadSleep(5000);
+		printf("T7\n");
+	}
+}
+void thread8(void *args){
+	while(1){
+		threadSleep(7000);
+		printf("T8\n");
+	}
+}
 
-//void thread5(void *args){
-//	while(1){
-//		threadSleep(7000);
-//		printf("I sleep for 7000ms, take %d\n", y++);
-//	}
-//}
+
 
 //This is C. The expected function heading is int main(void)
 int main( void ) 
@@ -68,16 +78,28 @@ int main( void )
 	kernelInit();
 	
 	// Create threads
-	createThread(idleThread, DEFAULT_THREAD_STACK_SIZE, MAX_IDLE_PERIOD);
+	createThread(idleThread, DEFAULT_THREAD_STACK_SIZE, MAX_IDLE_PERIOD, 0, false);
+	
+	//CASE 0: co-operative evenly time sliced
+//	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
+//	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
+//	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
 	
 	//CASE 1: createThread(void (*func)(void *vargs), uint32_t stackSize, uint32_t priority)
-	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 4);
-	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 4);
-	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 4);
+//	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 10, 1000/256, true);
+//	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 10, 1000/100, true);
+//	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 10, 1000/12, true);
+	
 	
 	//CASE 2:
-//	createThread(thread4);
-//	createThread(thread5);
+//	createThread(thread4, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
+//	createThread(thread5, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
+//	createThread(thread6, DEFAULT_THREAD_STACK_SIZE, 10, 1000/256, true);
+
+	//CASE 3:
+	createThread(thread7, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
+	createThread(thread8, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
+
 
 	
 	// start kernel

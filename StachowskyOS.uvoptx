@@ -147,9 +147,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>91</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>1132</Address>
+          <LineNumber>29</LineNumber>
+          <EnabledFlag>0</EnabledFlag>
+          <Address>3256</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -158,13 +158,13 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>\ecfile1.uwaterloo.ca\k5surend\My Documents\MTE 241\StachowskyOS\src\_kernelCore.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\tim\src/_kernelCore.c\91</Expression>
+          <Expression>\\tim\src/_kernelCore.c\29</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>25</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
+          <LineNumber>28</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -179,7 +179,7 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>69</LineNumber>
+          <LineNumber>33</LineNumber>
           <EnabledFlag>0</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -188,7 +188,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\src\p1_main.c</Filename>
+          <Filename>.\src\_kernelCore.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>

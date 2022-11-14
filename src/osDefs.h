@@ -2,6 +2,7 @@
 #define __osDefs_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MAX_NUM_THREADS 4
 #define DEFAULT_THREAD_STACK_SIZE 0x200
@@ -29,6 +30,8 @@ typedef struct {
 	uint32_t taskID;					// unique identifier for task
 	uint32_t priority;					// priority of thread (important for scheduling)
 	uint32_t threadTimer;				// contains timer variable for this thread
+	bool isPeriodic;					// if task is periodic
+	uint32_t periodicity;				// periodicity if periodic
 	taskState_t taskState;				// current state of task
 } thread_t;
 
