@@ -147,9 +147,57 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+          <LineNumber>22</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>4618</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\ecfile1.uwaterloo.ca\k5surend\My Documents\MTE 241\StachowskyOS\src\p1_main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\tim\src/p1_main.c\22</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
           <LineNumber>29</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>3256</Address>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>4676</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\ecfile1.uwaterloo.ca\k5surend\My Documents\MTE 241\StachowskyOS\src\p1_main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\tim\src/p1_main.c\29</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>24</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>4636</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\ecfile1.uwaterloo.ca\k5surend\My Documents\MTE 241\StachowskyOS\src\p1_main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\tim\src/p1_main.c\24</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>192</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>4420</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -158,12 +206,12 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>\ecfile1.uwaterloo.ca\k5surend\My Documents\MTE 241\StachowskyOS\src\_kernelCore.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\tim\src/_kernelCore.c\29</Expression>
+          <Expression>\\tim\src/_kernelCore.c\192</Expression>
         </Bp>
         <Bp>
-          <Number>1</Number>
+          <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>28</LineNumber>
+          <LineNumber>36</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -172,23 +220,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\src\_kernelCore.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>33</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>.\src\_kernelCore.c</Filename>
+          <Filename>.\src\p1_main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -213,6 +245,11 @@
           <count>3</count>
           <WinNumber>1</WinNumber>
           <ItemText>threadPool</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>mutexPool</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

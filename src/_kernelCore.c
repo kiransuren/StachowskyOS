@@ -8,6 +8,9 @@ thread_t threadPool[MAX_NUM_THREADS];
 int osCurrentThread = 0;
 int threadPoolCurrentSize = 0;
 
+mutex_t mutexPool[MAX_NUM_MUTEXES]; 
+int osMutexPoolCurrentSize = 0;
+
 void kernelInit(void){ 
 	//initializes memory structures and interrupts necessary to run the kernel
 	SHPR3 |= 0xFE << 16;	//set PendSV  priority to 2nd lowest
@@ -49,7 +52,6 @@ void osSched(void){
 	ICSR |= 1<<28;		// update PendSV exception bit to "pending"																																
 	__asm("isb");			// clear pipeline
 	
-	return;
 }
 
 int edfSched(void){
@@ -143,4 +145,112 @@ void SVC_Handler_Main(uint32_t *svc_args){
 		osSched();
 	}
 	// ensure idle function, right now after looping through once it just exists
+}
+
+int osCreateMutex(void){	
+	// creates a new mutex and adds it to the mutex pool
+	if(osMutexPoolCurrentSize >= MAX_NUM_MUTEXES){
+		return FAILED;
+	}
+	
+	// create new mutex and add to pool
+	mutex_t newMutex = {osCurrentThread, true, NULL};
+	mutexPool[osMutexPoolCurrentSize] = newMutex;
+	mutexPool[osMutexPoolCurrentSize].queueFront = -1;
+	mutexPool[osMutexPoolCurrentSize].queueRear = -1;
+	
+	osMutexPoolCurrentSize++;
+	
+	return newMutex.mutexID;
+}
+
+int osTakeMutex(uint32_t id, uint32_t waitTimeout){
+	// attempts to take mutex, waits timeout if not available
+	int currMutex;
+	
+	// find the mutex struct (NOT NECESSARY, JUST USE ID DIRECTLY FOR INDEX)
+	for(int i=0; i<osMutexPoolCurrentSize; i++){
+		if(mutexPool[i].mutexID == id){
+			currMutex = i;
+			break;
+		}
+	}
+	
+	if(mutexPool[currMutex].isFree){
+		// mutex free, get the mutex
+		mutexPool[currMutex].isFree = false;
+		mutexPool[currMutex].currentOwner = threadPool[osCurrentThread].taskID;
+		return SUCCESS;
+	} 
+	
+	// mutex not free, add to queue
+	//TODO: check if current owner task is trying to take the mutex, if so fail it
+	if(mutexPool[currMutex].currentOwner == threadPool[osCurrentThread].taskID){
+		return FAILED;
+	}
+	
+	if(enqueue(currMutex, osCurrentThread) == FAILED){
+		return FAILED;
+	}
+	//TODO: change thread to blocked, so it doesn't run at all
+	threadPool[osCurrentThread].taskState = BLOCKED;
+	osYield();
+	return SUCCESS;
+	
+	
+}
+
+int osGiveMutex(uint32_t id){
+	
+	// find the mutex struct (NOT NECESSARY, JUST USE ID DIRECTLY FOR INDEX)
+	int currMutex;
+	for(int i=0; i<osMutexPoolCurrentSize; i++){
+		if(mutexPool[i].mutexID == id){
+			currMutex = i;
+			break;
+		}
+	}
+	
+	// gives mutex back
+	if(threadPool[osCurrentThread].taskID == mutexPool[currMutex].currentOwner && !mutexPool[currMutex].isFree){
+		// current thread is owner and mutex is not free
+		
+		int newThreadID = dequeue(currMutex);
+		if(newThreadID == -1){
+			// queue was empty, no one is waiting
+			mutexPool[currMutex].isFree = true;
+		}else{
+			// assign mutex to new thread, change from blocked to ready?
+			mutexPool[currMutex].currentOwner = newThreadID;
+			threadPool[newThreadID].taskState = IDLE;
+		}
+		return SUCCESS;
+	}
+	
+	return FAILED;
+}
+
+
+int enqueue(int mutex, int thread){
+	if (mutexPool[mutex].queueRear == MAX_THREAD_WAITING_MUTEX - 1){
+		return FAILED;
+	}
+	else {
+		if (mutexPool[mutex].queueFront == - 1){
+			mutexPool[mutex].queueFront = 0;
+		}
+		mutexPool[mutex].queueRear = mutexPool[mutex].queueRear + 1;
+		mutexPool[mutex].waitingQueue[mutexPool[mutex].queueRear] = threadPool[thread];
+	}
+	return SUCCESS;
+} 
+ 
+int dequeue(int mutex){
+	if (mutexPool[mutex].queueFront == - 1 || mutexPool[mutex].queueFront > mutexPool[mutex].queueRear){
+		return -1;
+  } 
+	else{
+    mutexPool[mutex].queueFront = mutexPool[mutex].queueFront + 1;
+  }
+	return mutexPool[mutex].waitingQueue[mutexPool[mutex].queueFront - 1].taskID;
 }

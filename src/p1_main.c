@@ -10,6 +10,8 @@
 #include "_threadsCore.h"
 #include "_kernelCore.h"
 
+int printMutex;
+
 void idleThread(void *args){
 	while(1);
 }
@@ -17,17 +19,26 @@ void idleThread(void *args){
 //// CASE 1: three concurrent threads with diff frequencies
 void thread1(void *args){
 	while(1){
-		printf("s\n");
+		osTakeMutex(printMutex, 1000);
+		printf("Yo wasss good fam\n");
+		osGiveMutex(printMutex);
+		osYield();
 	}
 }
 void thread2(void *args){
 	while(1){
-		printf("y\n");
+		osTakeMutex(printMutex, 1000);
+		printf("Nahhh nothing much big dwag\n");
+		osGiveMutex(printMutex);
+		osYield();
 	}
 }
 void thread3(void *args){
 	while(1){
-		printf("f\n");
+		osTakeMutex(printMutex, 1000);
+		printf("Bet sayless G\n");
+		osGiveMutex(printMutex);
+		osYield();
 	}
 }
 
@@ -81,9 +92,9 @@ int main( void )
 	createThread(idleThread, DEFAULT_THREAD_STACK_SIZE, MAX_IDLE_PERIOD, 0, false);
 	
 	//CASE 0: co-operative evenly time sliced
-//	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
-//	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
-//	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
+	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
+	createThread(thread2, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
+	createThread(thread3, DEFAULT_THREAD_STACK_SIZE, 1, 0, false);
 	
 	//CASE 1: createThread(void (*func)(void *vargs), uint32_t stackSize, uint32_t priority)
 //	createThread(thread1, DEFAULT_THREAD_STACK_SIZE, 10, 1000/256, true);
@@ -97,11 +108,11 @@ int main( void )
 //	createThread(thread6, DEFAULT_THREAD_STACK_SIZE, 10, 1000/256, true);
 
 	//CASE 3:
-	createThread(thread7, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
-	createThread(thread8, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
+//	createThread(thread7, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
+//	createThread(thread8, DEFAULT_THREAD_STACK_SIZE, 10, 0, false);
 
 
-	
+	printMutex = osCreateMutex();
 	// start kernel
 	kernelStart();
 
