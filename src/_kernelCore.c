@@ -165,7 +165,7 @@ int osCreateMutex(void){
 	return newMutex.mutexID;
 }
 
-void osTakeMutex(uint32_t id, uint32_t waitTimeout){
+int osTakeMutex(uint32_t id, uint32_t waitTimeout){
 	// attempts to take mutex, waits timeout if not available
 	int currMutex;
 	
@@ -181,28 +181,24 @@ void osTakeMutex(uint32_t id, uint32_t waitTimeout){
 		// mutex free, get the mutex
 		mutexPool[currMutex].isFree = false;
 		mutexPool[currMutex].currentOwner = threadPool[osCurrentThread].taskID;
-		//return SUCCESS;
-		return;
+		return SUCCESS;
 	} 
 	
-	// mutex not free, add to queue
-	//TODO: check if current owner task is trying to take the mutex, if so fail it
+	//check if current owner task is trying to take the mutex, if so fail it
 	if(mutexPool[currMutex].currentOwner == threadPool[osCurrentThread].taskID){
-		//return FAILED;
-		return;
+		return FAILED;
 	}
 	
-	// not enough space in mutex queue
+	// mutex not free, add to queue
 	if(enqueue(currMutex, osCurrentThread) == FAILED){
-		//return FAILED;
-		return;
+		// not enough space in mutex queue
+		return FAILED;
 	}
 	
-	// thread added to mutex waiting queue
-	//TODO: change thread to blocked, so it doesn't run at all
+	// thread added to mutex waiting queue success -> change state to blocked and yield
 	threadPool[osCurrentThread].taskState = BLOCKED;
 	osYield();
-	//return SUCCESS;
+	return SUCCESS;
 }
 
 int osGiveMutex(uint32_t id){
@@ -225,7 +221,7 @@ int osGiveMutex(uint32_t id){
 			// queue was empty, no one is waiting
 			mutexPool[currMutex].isFree = true;
 		}else{
-			// assign mutex to new thread, change from blocked to ready?
+			// assign mutex to new thread, change from blocked to idle?
 			mutexPool[currMutex].currentOwner = newThreadID;
 			threadPool[newThreadID].taskState = IDLE;
 		}
@@ -235,6 +231,8 @@ int osGiveMutex(uint32_t id){
 	return FAILED;
 }
 
+// queue code was developed based off this implementation
+// https://www.tutorialspoint.com/data_structures_algorithms/queue_program_in_c.htm
 
 int enqueue(int mutex, int thread){
 	
@@ -244,7 +242,6 @@ int enqueue(int mutex, int thread){
 		if(mutexPool[mutex].queueRear == MAX_THREAD_WAITING_MUTEX - 1){
 			mutexPool[mutex].queueRear = -1;
 		}
-		
 		mutexPool[mutex].waitingQueue[++(mutexPool[mutex].queueRear)] = threadPool[thread]; //add to queue
 		(mutexPool[mutex].queueSize)++;
 		return SUCCESS;
