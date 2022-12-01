@@ -1,6 +1,6 @@
 Dependencies for Project 'StachowskyOS', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 5060750::V5.06 update 6 (build 750)::ARMCC
-F (.\src\p1_main.c)(0x637FCC6C)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include-D__UVISION_VERSION="531" -D_RTE_ -DLPC175x_6x -D_RTE_ -D__RTGT_UART-o .\objects\p1_main.o --omf_browse .\objects\p1_main.crf --depend .\objects\p1_main.d)
+F (.\src\p1_main.c)(0x6388DC84)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include-D__UVISION_VERSION="531" -D_RTE_ -DLPC175x_6x -D_RTE_ -D__RTGT_UART-o .\objects\p1_main.o --omf_browse .\objects\p1_main.crf --depend .\objects\p1_main.d)
 I (C:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include\LPC17xx.h)(0x5E1E0B04)
 I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm3.h)(0x60D491A2)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5EC81EBC)
@@ -12,9 +12,9 @@ I (C:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include\system_LPC
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5EC81EBC)
 I (src\uart.h)(0x62704664)
 I (src\_threadsCore.h)(0x6372BEB9)
-I (src\osDefs.h)(0x637FC659)
+I (src\osDefs.h)(0x6388DE18)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5EC81EB6)
-I (src\_kernelCore.h)(0x637FD20E)
+I (src\_kernelCore.h)(0x6388DB68)
 F (.\src\Retarget.c)(0x62704664)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include-D__UVISION_VERSION="531" -D_RTE_ -DLPC175x_6x -D_RTE_ -D__RTGT_UART-o .\objects\retarget.o --omf_browse .\objects\retarget.crf --depend .\objects\retarget.d)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5EC81EBC)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\rt_misc.h)(0x5EC81EB2)
@@ -32,8 +32,8 @@ I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(
 I (C:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include\system_LPC17xx.h)(0x584985E2)
 I (src\uart.h)(0x62704664)
 F (.\src\svc_call.s)(0x636D4752)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include--pd "__UVISION_VERSION SETA 531" --pd "_RTE_ SETA 1" --pd "LPC175x_6x SETA 1" --pd "_RTE_ SETA 1"--list .\listings\svc_call.lst --xref -o .\objects\svc_call.o --depend .\objects\svc_call.d)
-F (.\src\_kernelCore.c)(0x637FD475)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include-D__UVISION_VERSION="531" -D_RTE_ -DLPC175x_6x -D_RTE_ -D__RTGT_UART-o .\objects\_kernelcore.o --omf_browse .\objects\_kernelcore.crf --depend .\objects\_kernelcore.d)
-I (src\_kernelCore.h)(0x637FD20E)
+F (.\src\_kernelCore.c)(0x6388E138)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include-D__UVISION_VERSION="531" -D_RTE_ -DLPC175x_6x -D_RTE_ -D__RTGT_UART-o .\objects\_kernelcore.o --omf_browse .\objects\_kernelcore.crf --depend .\objects\_kernelcore.d)
+I (src\_kernelCore.h)(0x6388DB68)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdint.h)(0x5EC81EBC)
 I (C:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include\LPC17xx.h)(0x5E1E0B04)
 I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm3.h)(0x60D491A2)
@@ -42,7 +42,7 @@ I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_compile
 I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h)(0x60D491A2)
 I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D491A2)
 I (C:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include\system_LPC17xx.h)(0x584985E2)
-I (src\osDefs.h)(0x637FC659)
+I (src\osDefs.h)(0x6388DE18)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5EC81EB6)
 I (src\_threadsCore.h)(0x6372BEB9)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdio.h)(0x5EC81EBC)
@@ -56,9 +56,9 @@ I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_compile
 I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armcc.h)(0x60D491A2)
 I (C:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h)(0x60D491A2)
 I (C:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include\system_LPC17xx.h)(0x584985E2)
-I (src\osDefs.h)(0x637FC659)
+I (src\osDefs.h)(0x6388DE18)
 I (C:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5EC81EB6)
-I (src\_kernelCore.h)(0x637FD20E)
+I (src\_kernelCore.h)(0x6388DB68)
 F (RTE\Device\LPC1768\RTE_Device.h)(0x5D5C2A1A)()
 F (RTE\Device\LPC1768\startup_LPC17xx.s)(0x635ACAC2)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include--pd "__UVISION_VERSION SETA 531" --pd "_RTE_ SETA 1" --pd "LPC175x_6x SETA 1" --pd "_RTE_ SETA 1"--list .\listings\startup_lpc17xx.lst --xref -o .\objects\startup_lpc17xx.o --depend .\objects\startup_lpc17xx.d)
 F (RTE\Device\LPC1768\system_LPC17xx.c)(0x5E1E0B04)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections-I.\RTE\Device\LPC1768-I.\RTE\_Target_1-IC:\Software\Keil_v5\ARM\PACK\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IC:\Software\Keil_v5\ARM\PACK\Keil\LPC1700_DFP\2.7.0\Device\Include-D__UVISION_VERSION="531" -D_RTE_ -DLPC175x_6x -D_RTE_ -D__RTGT_UART-o .\objects\system_lpc17xx.o --omf_browse .\objects\system_lpc17xx.crf --depend .\objects\system_lpc17xx.d)

@@ -48,6 +48,7 @@ typedef struct {
 	thread_t waitingQueue[MAX_THREAD_WAITING_MUTEX];
 	int queueFront;
 	int queueRear;
+	int queueSize;
 } mutex_t;
 
 #endif

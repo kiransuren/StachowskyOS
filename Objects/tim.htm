@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\Objects\tim.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\tim.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Nov 24 15:33:17 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Dec 01 12:15:40 2022
 <BR><P>
-<H3>Maximum Stack Usage =        400 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        408 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; osCreateMutex &rArr; __aeabi_memcpy4
 <P>
@@ -200,7 +200,7 @@ Global Symbols
 <P><STRONG><a name="[8c]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[44]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 400 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 408 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; osCreateMutex &rArr; __aeabi_memcpy4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -560,8 +560,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[68]"></a>dequeue</STRONG> (Thumb, 152 bytes, Stack size 0 bytes, _kernelcore.o(i.dequeue))
-<BR><BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osGiveMutex
+<P><STRONG><a name="[68]"></a>dequeue</STRONG> (Thumb, 156 bytes, Stack size 8 bytes, _kernelcore.o(i.dequeue))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = dequeue
+</UL>
+<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osGiveMutex
 </UL>
 
 <P><STRONG><a name="[58]"></a>edfSched</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, _kernelcore.o(i.edfSched))
@@ -571,7 +573,7 @@ Global Symbols
 <LI><a href="#[d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 
-<P><STRONG><a name="[60]"></a>enqueue</STRONG> (Thumb, 176 bytes, Stack size 16 bytes, _kernelcore.o(i.enqueue))
+<P><STRONG><a name="[60]"></a>enqueue</STRONG> (Thumb, 162 bytes, Stack size 16 bytes, _kernelcore.o(i.enqueue))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = enqueue &rArr; __aeabi_memcpy4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
@@ -623,7 +625,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[45]"></a>main</STRONG> (Thumb, 170 bytes, Stack size 8 bytes, p1_main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 400<LI>Call Chain = main &rArr; osCreateMutex &rArr; __aeabi_memcpy4
+<BR><BR>[Stack]<UL><LI>Max Depth = 408<LI>Call Chain = main &rArr; osCreateMutex &rArr; __aeabi_memcpy4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osCreateMutex
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kernelStart
@@ -634,16 +636,16 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[66]"></a>osCreateMutex</STRONG> (Thumb, 128 bytes, Stack size 384 bytes, _kernelcore.o(i.osCreateMutex))
-<BR><BR>[Stack]<UL><LI>Max Depth = 392<LI>Call Chain = osCreateMutex &rArr; __aeabi_memcpy4
+<P><STRONG><a name="[66]"></a>osCreateMutex</STRONG> (Thumb, 132 bytes, Stack size 392 bytes, _kernelcore.o(i.osCreateMutex))
+<BR><BR>[Stack]<UL><LI>Max Depth = 400<LI>Call Chain = osCreateMutex &rArr; __aeabi_memcpy4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[67]"></a>osGiveMutex</STRONG> (Thumb, 170 bytes, Stack size 16 bytes, _kernelcore.o(i.osGiveMutex))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = osGiveMutex
+<P><STRONG><a name="[67]"></a>osGiveMutex</STRONG> (Thumb, 152 bytes, Stack size 16 bytes, _kernelcore.o(i.osGiveMutex))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = osGiveMutex &rArr; dequeue
 </UL>
 <BR>[Calls]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dequeue
 </UL>
@@ -662,7 +664,7 @@ Global Symbols
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kernelStart
 </UL>
 
-<P><STRONG><a name="[69]"></a>osTakeMutex</STRONG> (Thumb, 204 bytes, Stack size 16 bytes, _kernelcore.o(i.osTakeMutex))
+<P><STRONG><a name="[69]"></a>osTakeMutex</STRONG> (Thumb, 176 bytes, Stack size 16 bytes, _kernelcore.o(i.osTakeMutex))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = osTakeMutex &rArr; enqueue &rArr; __aeabi_memcpy4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;enqueue

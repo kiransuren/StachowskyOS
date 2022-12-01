@@ -156,15 +156,16 @@ int osCreateMutex(void){
 	// create new mutex and add to pool
 	mutex_t newMutex = {osCurrentThread, true, NULL};
 	mutexPool[osMutexPoolCurrentSize] = newMutex;
-	mutexPool[osMutexPoolCurrentSize].queueFront = -1;
+	mutexPool[osMutexPoolCurrentSize].queueFront = 0;
 	mutexPool[osMutexPoolCurrentSize].queueRear = -1;
+	mutexPool[osMutexPoolCurrentSize].queueSize = 0;
 	
 	osMutexPoolCurrentSize++;
 	
 	return newMutex.mutexID;
 }
 
-int osTakeMutex(uint32_t id, uint32_t waitTimeout){
+void osTakeMutex(uint32_t id, uint32_t waitTimeout){
 	// attempts to take mutex, waits timeout if not available
 	int currMutex;
 	
@@ -180,24 +181,28 @@ int osTakeMutex(uint32_t id, uint32_t waitTimeout){
 		// mutex free, get the mutex
 		mutexPool[currMutex].isFree = false;
 		mutexPool[currMutex].currentOwner = threadPool[osCurrentThread].taskID;
-		return SUCCESS;
+		//return SUCCESS;
+		return;
 	} 
 	
 	// mutex not free, add to queue
 	//TODO: check if current owner task is trying to take the mutex, if so fail it
 	if(mutexPool[currMutex].currentOwner == threadPool[osCurrentThread].taskID){
-		return FAILED;
+		//return FAILED;
+		return;
 	}
 	
+	// not enough space in mutex queue
 	if(enqueue(currMutex, osCurrentThread) == FAILED){
-		return FAILED;
+		//return FAILED;
+		return;
 	}
+	
+	// thread added to mutex waiting queue
 	//TODO: change thread to blocked, so it doesn't run at all
 	threadPool[osCurrentThread].taskState = BLOCKED;
 	osYield();
-	return SUCCESS;
-	
-	
+	//return SUCCESS;
 }
 
 int osGiveMutex(uint32_t id){
@@ -232,25 +237,34 @@ int osGiveMutex(uint32_t id){
 
 
 int enqueue(int mutex, int thread){
-	if (mutexPool[mutex].queueRear == MAX_THREAD_WAITING_MUTEX - 1){
-		return FAILED;
-	}
-	else {
-		if (mutexPool[mutex].queueFront == - 1){
-			mutexPool[mutex].queueFront = 0;
+	
+	if(mutexPool[mutex].queueSize != MAX_THREAD_WAITING_MUTEX){
+		
+		// check if loop back for queue is required
+		if(mutexPool[mutex].queueRear == MAX_THREAD_WAITING_MUTEX - 1){
+			mutexPool[mutex].queueRear = -1;
 		}
-		mutexPool[mutex].queueRear = mutexPool[mutex].queueRear + 1;
-		mutexPool[mutex].waitingQueue[mutexPool[mutex].queueRear] = threadPool[thread];
+		
+		mutexPool[mutex].waitingQueue[++(mutexPool[mutex].queueRear)] = threadPool[thread]; //add to queue
+		(mutexPool[mutex].queueSize)++;
+		return SUCCESS;
 	}
-	return SUCCESS;
+	return FAILED; 	// not enough space in queue
 } 
  
 int dequeue(int mutex){
-	if (mutexPool[mutex].queueFront == - 1 || mutexPool[mutex].queueFront > mutexPool[mutex].queueRear){
-		return -1;
-  } 
-	else{
-    mutexPool[mutex].queueFront = mutexPool[mutex].queueFront + 1;
-  }
-	return mutexPool[mutex].waitingQueue[mutexPool[mutex].queueFront - 1].taskID;
+	
+	if(mutexPool[mutex].queueSize == 0){
+		return -1; //empty queue
+	}
+	int data = mutexPool[mutex].waitingQueue[mutexPool[mutex].queueFront].taskID;	// get ID
+	(mutexPool[mutex].queueFront)++; //increment front
+	
+	if(mutexPool[mutex].queueFront == MAX_THREAD_WAITING_MUTEX){
+		mutexPool[mutex].queueFront = 0;
+	}
+	
+	(mutexPool[mutex].queueSize)--;
+	
+	return data;
 }

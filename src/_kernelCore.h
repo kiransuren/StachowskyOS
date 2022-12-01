@@ -21,7 +21,7 @@ int kernelStart(void);
 void threadSleep(uint32_t sleepPeriod);
 
 int osCreateMutex(void);	// creates a new mutex and adds it to the mutex pool
-int osTakeMutex(uint32_t id, uint32_t waitTimeout);	// attempts to take mutex, waits timeout if not available
+void osTakeMutex(uint32_t id, uint32_t waitTimeout);	// attempts to take mutex, waits timeout if not available
 int osGiveMutex(uint32_t id);						// gives mutex back
 
 int enqueue(int mutex, int thread);

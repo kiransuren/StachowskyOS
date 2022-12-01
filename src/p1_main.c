@@ -20,7 +20,7 @@ void idleThread(void *args){
 void thread1(void *args){
 	while(1){
 		osTakeMutex(printMutex, 1000);
-		printf("Yo wasss good fam\n");
+		printf("Thread 1\n");
 		osGiveMutex(printMutex);
 		osYield();
 	}
@@ -28,7 +28,7 @@ void thread1(void *args){
 void thread2(void *args){
 	while(1){
 		osTakeMutex(printMutex, 1000);
-		printf("Nahhh nothing much big dwag\n");
+		printf("Thread 2\n");
 		osGiveMutex(printMutex);
 		osYield();
 	}
@@ -36,7 +36,7 @@ void thread2(void *args){
 void thread3(void *args){
 	while(1){
 		osTakeMutex(printMutex, 1000);
-		printf("Bet sayless G\n");
+		printf("Thread 3\n");
 		osGiveMutex(printMutex);
 		osYield();
 	}
